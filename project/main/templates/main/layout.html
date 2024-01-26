@@ -1,5 +1,6 @@
-{% load static %} {% load i18n %}
-<!doctype html>
+{% load static %}
+{% load i18n %}
+
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -29,20 +30,28 @@
         <a href="{% url 'about' %}">
             <li><i class="fa-solid fa-address-card"></i> Про нас</li>
         </a>
-        <a href="{% url 'posts' %}">
+
+        <a href="{% url 'about' %}">
             <li><i class="fa-regular fa-newspaper"></i> Публикации</li>
         </a>
         <br>
-            <img src="{% static 'main/img/dragon.gif' %}" alt="logo", width="200" height="100">
+        <img src="{% static 'main/img/dragon.gif' %}" alt="logo" , width="200" height="100">
         <br><br><br><br><br>
 
-        <a href="{% url 'login' %}">
-            <li><i class="fa-solid fa-right-to-bracket"></i> Вход/Регистрация</li>
-        </a>
-        <a href="{% url 'logout' %}">
-            <li><i class="fa-solid fa-right-from-bracket"></i> Выход</li>
-        </a>
-
+        {% if not user.is_authenticated %}
+        <br>
+<p>Для размещения вашего поста требуется регистрация</p>
+        <a href="{% url 'about' %}">
+            <a href="/logon/">
+                <li><i class="fa-solid fa-right-to-bracket"></i> Вход/Регистрация</li>
+            </a>
+            {% else %}
+            <br>
+            <p>Вы зарегистрированы как "{{ user }}"</p>
+            <a href="{% url 'logout_confirmed' %}">
+                <li><i class="fa-solid fa-right-from-bracket"></i> Выход</li>
+            </a>
+            {% endif %}
     </ul>
     </html>
 
