@@ -3,8 +3,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+
+from django.conf.global_settings import DEFAULT_FROM_EMAIL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,6 +22,32 @@ SECRET_KEY = 'django-insecure-=5bso*air5)$)%$$g-g*5=z8l*bd=aflu(cc%(ox9vsyji+j&#
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+    # `allauth` specific authentication methods, such as login by e-mail
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = "/"
+
+ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_UNIQUE_EMAIL = True
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+ACCOUNT_EMAIL_VERIFICATION = 'none' # - без проверки
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' #Приветственное письмо вновьзарегистрировавшемуся товарищу
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # все уведомления будут приходить в консоль.
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'#Чтобы уведомления приходили на почту
+
+SITE_ID = 1
+ACCOUNT_FORMS = {"signup": "sign.models.BasicSignupForm"}
+
+ADMINS = {'admin', 'skippervasin@gmail.com'}
+
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+
 
 # Application definition
 
@@ -32,9 +60,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'accounts',
+    'sign',
     'main',
     'posts',
+    'protect',
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    # ... include the providers you want to enable:
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -47,6 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'django.middleware.locale.LocaleMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -62,6 +98,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
+                'django.template.context_processors.request', # `allauth` needs this from django
             ],
         },
     },

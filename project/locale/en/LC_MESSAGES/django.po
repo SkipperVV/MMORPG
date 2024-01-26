@@ -23,16 +23,16 @@ msgstr ""
 
 #: .\posts\models.py:12
 msgid "Введите название новой категории"
-msgstr ""
+msgstr "Enter the name of the new category"
 
 #: .\posts\models.py:18
 msgid "Выбор автора"
-msgstr ""
+msgstr "Author's choice"
 
 #: .\posts\models.py:20
 msgid "Введите заголовок"
-msgstr ""
+msgstr "Enter title"
 
 #: .\posts\models.py:21
 msgid "Содержание статьи"
-msgstr ""
+msgstr "The content of the article"
